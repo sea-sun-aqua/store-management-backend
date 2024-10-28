@@ -11,5 +11,6 @@ type ProductRepository interface {
 	Create(ctx context.Context, req *requests.ProductRegisterRequest) error
 	FindByName(ctx context.Context, name string) (*models.Product, error)
 	FindByID(ctx context.Context, id string) (*models.Product, error)
-	GetAllProducts(ctx context.Context) ([]models.Product, error)
+	GetAll(ctx context.Context) ([]models.Product, error)
+	UpdateAmountByID(ctx context.Context, id string, req *requests.ProductUpdateAmountRequest) error
 }

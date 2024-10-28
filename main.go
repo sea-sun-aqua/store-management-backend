@@ -36,13 +36,13 @@ func main() {
 	productService := services.NewProductService(productRepo)
 	productHandler := rest.NewProductHandler(productService)
 
-	app.Post("/register", staffHandler.Register)
-	app.Post("/login", staffHandler.Login)
+	app.Post("/register", staffHandler.Register) //correct
+	app.Post("/login", staffHandler.Login) //correct
 
-	app.Post("/product/register", productHandler.Register)
-	app.Post("/product/:Name", productHandler.FindByName)
-	app.Post("/product/:ProductID", productHandler.FindByID)
-	app.Get("/product", productHandler.GetAllProducts)
+	app.Post("/product", productHandler.Register) //correct
+	app.Post("/product/:ProductID", productHandler.UpdateProductByID) //correct
+	app.Get("/product/:ProductID", productHandler.FindByID) //correct
+	app.Get("/product", productHandler.GetAllProducts) //correct
 
 
 
