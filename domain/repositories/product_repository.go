@@ -1,0 +1,15 @@
+package repositories
+
+import (
+	"context"
+
+	"github.com/FLUKKIES/marketplace-backend/domain/models"
+	"github.com/FLUKKIES/marketplace-backend/domain/requests"
+)
+
+type ProductRepository interface {
+	Create(ctx context.Context, req *requests.ProductRegisterRequest) error
+	FindByName(ctx context.Context, name string) (*models.Product, error)
+	FindByID(ctx context.Context, id string) (*models.Product, error)
+	GetAllProducts(ctx context.Context) ([]models.Product, error)
+}

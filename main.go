@@ -32,8 +32,19 @@ func main() {
 	staffService := services.NewStaffService(staffRepo)
 	staffHandler := rest.NewStaffHandler(staffService)
 
+	productRepo := mysql.NewProductMYSQLRepository(db)
+	productService := services.NewProductService(productRepo)
+	productHandler := rest.NewProductHandler(productService)
+
 	app.Post("/register", staffHandler.Register)
 	app.Post("/login", staffHandler.Login)
+
+	app.Post("/product/register", productHandler.Register)
+	app.Post("/product/:Name", productHandler.FindByName)
+	app.Post("/product/:ProductID", productHandler.FindByID)
+	app.Get("/product", productHandler.GetAllProducts)
+
+
 
 	//ทำงานก่อน return 
 	defer db.Close()

@@ -11,18 +11,18 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type StaffMYSQLRepository struct {
+type staffMYSQLRepository struct {
 	db *sqlx.DB
 }
 
 func NewStaffMYSQLRepository(db *sqlx.DB) repositories.StaffRepository {
-	return &StaffMYSQLRepository{
+	return &staffMYSQLRepository{
 		db: db,
 	}
 }
 
 // Create implements repositories.StaffRepository.
-func (s *StaffMYSQLRepository) Create(ctx context.Context, req *requests.StaffRegisterRequest) error {
+func (s *staffMYSQLRepository) Create(ctx context.Context, req *requests.StaffRegisterRequest) error {
 	// Generate UUID
 	id, err := uuid.NewV7()
 	if err != nil {
@@ -35,7 +35,7 @@ func (s *StaffMYSQLRepository) Create(ctx context.Context, req *requests.StaffRe
 }
 
 // FindByEmail implements repositories.StaffRepository.
-func (s *StaffMYSQLRepository) FindByEmail(ctx context.Context, email string) (*models.Staff, error) {
+func (s *staffMYSQLRepository) FindByEmail(ctx context.Context, email string) (*models.Staff, error) {
 		var staff models.Staff
 		err := s.db.QueryRowContext(ctx, "SELECT staff_id, staff_name, staff_email, staff_password FROM staff WHERE staff_email = ?", email).Scan(&staff.StaffID, &staff.Name, &staff.Email, &staff.Password)
 		if err == sql.ErrNoRows {
@@ -47,5 +47,4 @@ func (s *StaffMYSQLRepository) FindByEmail(ctx context.Context, email string) (*
 		}
 	
 		return &staff, nil
-	
 }
