@@ -108,11 +108,11 @@ func (p *productHandler) Register(c *fiber.Ctx) error {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"error": "Name already registered",
 			})
-		default:
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": err.Error(),
-			})
-		}
+			default:
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+					"error": err.Error(),
+				})
+			}
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{

@@ -32,18 +32,17 @@ func (p *productMYSQLRepository) Create(ctx context.Context, req *requests.Produ
 }
 
 func (p *productMYSQLRepository) FindByID(ctx context.Context, id string) (*models.Product, error) {
-	var product models.Product
-	err := p.db.QueryRowContext(ctx, "SELECT product_id, product_name, product_price, product_amount, safety_stock_amount FROM product WHERE product_id = ?", id).Scan(&product.ProductID, &product.Name, &product.Price, &product.Amount, &product.QuantityOfSafetyStock)
-	if err == sql.ErrNoRows {
-		return nil, nil
-	}
-	if err != nil {
-		return nil, err
-	}
+		var product models.Product
+		err := p.db.QueryRowContext(ctx, "SELECT product_id, product_name, product_price, product_amount, safety_stock_amount FROM product WHERE product_id = ?", id).Scan(&product.ProductID, &product.Name, &product.Price, &product.Amount, &product.QuantityOfSafetyStock)
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		if err != nil {
+			return nil, err
+		}
 
-	println(product.ProductID, product.Name, product.Price, product.Amount, product.QuantityOfSafetyStock)
 
-	return &product, nil
+		return &product, nil
 }
 
 func (p *productMYSQLRepository) FindByName(ctx context.Context, name string) (*models.Product, error) {
@@ -59,22 +58,11 @@ func (p *productMYSQLRepository) FindByName(ctx context.Context, name string) (*
 }
 
 func (p *productMYSQLRepository) GetAll(ctx context.Context) ([]models.Product, error) {
-	rows, err := p.db.Query("SELECT * FROM product")
-	if err != nil {
-		panic(err.Error())
-	}
-	defer rows.Close()
-
 	var products []models.Product
-	for rows.Next() {
-		var p models.Product
-		err := rows.Scan(&p.ProductID, &p.Name, &p.Price, &p.Amount, &p.QuantityOfSafetyStock)
-		if err != nil {
-			panic(err.Error())
-
-		}
-		products = append(products, p)
+	// product_id, product_name, product_price, product_amount, safety_stock_amount
+	err := p.db.SelectContext(ctx, &products, "SELECT * FROM product")
+	if err != nil {
+		return nil, err
 	}
-
 	return products, nil
 }

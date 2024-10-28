@@ -8,14 +8,15 @@ import (
 	"github.com/FLUKKIES/marketplace-backend/configs"
 	"github.com/FLUKKIES/marketplace-backend/domain/services"
 	"github.com/FLUKKIES/marketplace-backend/internal/adapter/mysql"
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/FLUKKIES/marketplace-backend/internal/adapter/rest"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
 )
 
 func main() {
 	app := fiber.New()
+
 
 	ctx := context.Background()
 
@@ -28,13 +29,20 @@ func main() {
 	}
 
 	// Dependencies Injection
+	// staff
 	staffRepo := mysql.NewStaffMYSQLRepository(db)
 	staffService := services.NewStaffService(staffRepo)
 	staffHandler := rest.NewStaffHandler(staffService)
 
+	// product
 	productRepo := mysql.NewProductMYSQLRepository(db)
 	productService := services.NewProductService(productRepo)
 	productHandler := rest.NewProductHandler(productService)
+
+	//orders
+	orderRepo := mysql.NewOrderMYSQLRepository(db)
+	orderService := services.NewOrderService(orderRepo)
+	orderHandler := rest.NewOrderHandler(orderService)
 
 	app.Post("/register", staffHandler.Register) //correct
 	app.Post("/login", staffHandler.Login) //correct
@@ -44,6 +52,9 @@ func main() {
 	app.Get("/product/:ProductID", productHandler.FindByID) //correct
 	app.Get("/product", productHandler.GetAllProducts) //correct
 
+	app.Post("/order", orderHandler.Create) //correct
+	app.Post("/order/:OrderID", orderHandler.UpdateStatusOrder) //correct
+	app.Get("/order", orderHandler.GetAll) //correct
 
 
 	//ทำงานก่อน return 
