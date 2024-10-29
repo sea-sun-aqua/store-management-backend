@@ -21,7 +21,7 @@ func NewOrderService(orderRepo repositories.OrderRepository) usecases.OrderUseCa
 	}
 }
 
-func (o *orderService) Create(ctx context.Context, req *requests.OrderCreateRequest) error {
+func (o *orderService) Create(ctx context.Context, req *requests.OrderCreateRequest) error {	
 	result, err := o.orderRepo.FindByID(ctx, req.OrderID)
 	if err != nil {
 		return err

@@ -11,11 +11,18 @@ import (
 	"github.com/FLUKKIES/marketplace-backend/internal/adapter/rest"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/jmoiron/sqlx"
 )
 
 func main() {
 	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*", // อนุญาตให้ request มาจากโดเมนนี้
+		AllowHeaders: "Origin, Content-Type, Accept",
+		AllowMethods: "GET, POST, PUT, DELETE",
+	}))
 
 
 	ctx := context.Background()
@@ -44,6 +51,11 @@ func main() {
 	orderService := services.NewOrderService(orderRepo)
 	orderHandler := rest.NewOrderHandler(orderService)
 
+	//order_detail
+	orderDetailRepo := mysql.NewOrderDetailMYSQLRepository(db)
+	orderDetailService := services.NewOrderDetailService(orderDetailRepo)
+	orderDetailHandler := rest.NewOrderDetailHandler(orderDetailService)
+
 	app.Post("/register", staffHandler.Register) //correct
 	app.Post("/login", staffHandler.Login) //correct
 
@@ -55,6 +67,8 @@ func main() {
 	app.Post("/order", orderHandler.Create) //correct
 	app.Post("/order/:OrderID", orderHandler.UpdateStatusOrder) //correct
 	app.Get("/order", orderHandler.GetAll) //correct
+
+	app.Get("/order-detail", orderDetailHandler.GetAll) //correct
 
 
 	//ทำงานก่อน return 

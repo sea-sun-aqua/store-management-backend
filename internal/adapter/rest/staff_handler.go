@@ -30,6 +30,7 @@ func (s *staffHandler) Login(c *fiber.Ctx) error {
 				"error": err.Error(),
 			})
 		}
+	
 
 	// Login staff
 	staff, err := s.service.Login(c.Context(), req)

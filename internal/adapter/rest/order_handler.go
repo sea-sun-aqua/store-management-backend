@@ -52,7 +52,6 @@ func (o *orderHandler) Create(c *fiber.Ctx) error {
 
 func (o *orderHandler) GetAll(c *fiber.Ctx) error {
 	orders, err := o.service.GetAll(c.Context())
-	println(1)
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"error": err.Error(),
