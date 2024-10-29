@@ -7,34 +7,31 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type OrderHandler interface {
+type PurchaseOrderHandler interface {
 	Create(c *fiber.Ctx) error
 	GetAll(c *fiber.Ctx) error
 	UpdateStatusOrder(c *fiber.Ctx) error
 }
 
-type orderHandler struct {
-	service usecases.OrderUseCase
+type purchaseOrderHandler struct {
+	service usecases.PurchaseOrderUseCase
 }
 
-func NewOrderHandler(service usecases.OrderUseCase) OrderHandler {
-	return &orderHandler{
-		service: service,
-	}
+func NewPurchaseOrderHandler(service usecases.PurchaseOrderUseCase) PurchaseOrderHandler {
+	return &purchaseOrderHandler{service: service}
 }
 
-func (o *orderHandler) Create(c *fiber.Ctx) error {
-	var req *requests.OrderCreateRequest
+func (p *purchaseOrderHandler) Create(c *fiber.Ctx) error {
+	var req *requests.PurchaseOrderCreateRequest
 	if err := c.BodyParser(&req); err != nil {
 		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": err.Error(),
 		})
 	}
-	
 
-	if err := o.service.Create(c.Context(), req); err != nil {
+	if err := p.service.Create(c.Context(), req); err != nil {
 		switch err {
-		case exceptions.ErrDuplicatedIDOrder:
+		case exceptions.ErrDuplicatedPurchaseIDOrder:
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"error": "ID already registered",
 			})
@@ -46,39 +43,39 @@ func (o *orderHandler) Create(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"message": "Order created successfully",
+		"message": "Purchase order created successfully",
 	})
 }
 
-func (o *orderHandler) GetAll(c *fiber.Ctx) error {
-	orders, err := o.service.GetAll(c.Context())
+func (p *purchaseOrderHandler) GetAll(c *fiber.Ctx) error {
+	purchaseOrders, err := p.service.GetAll(c.Context())
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"error": err.Error(),
 		})
 	}
-	return c.Status(fiber.StatusOK).JSON(orders)
+	return c.Status(fiber.StatusOK).JSON(purchaseOrders)
 }
 
-func (o *orderHandler) UpdateStatusOrder(c *fiber.Ctx) error {
-	orderID := c.Params("OrderID")
-	var req *requests.OrderUpdateStatusRequest
+func (p *purchaseOrderHandler) UpdateStatusOrder(c *fiber.Ctx) error {
+	purchaseOrderID := c.Params("PurchaseOrderID")
+	var req *requests.PurchaseOrderUpdateStatusRequest
 	if err := c.BodyParser(&req); err != nil {
 		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": err.Error(),
 		})
 	}
 
-	order, err := o.service.UpdateStatusByID(c.Context(), orderID, req)
+	purchaseOrder, err := p.service.UpdateStatusByID(c.Context(), purchaseOrderID, req)
 	if err != nil {
 		switch err {
 		case exceptions.ErrStatusInvalid:
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-				"error": "Order status invalid",
+				"error": "Purchase status invalid",
 			})
-		case exceptions.ErrOrderIDNotFound:
+		case exceptions.ErrPurchaseOrderIDNotFound:
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-				"error": "Order not found",
+				"error": "Purchase order not found",
 			})
 		default:
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -86,5 +83,5 @@ func (o *orderHandler) UpdateStatusOrder(c *fiber.Ctx) error {
 			})
 		}
 	}
-	return c.Status(fiber.StatusOK).JSON(order)
+	return c.Status(fiber.StatusOK).JSON(purchaseOrder)
 }

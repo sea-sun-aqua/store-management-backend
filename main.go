@@ -56,6 +56,17 @@ func main() {
 	orderDetailService := services.NewOrderDetailService(orderDetailRepo)
 	orderDetailHandler := rest.NewOrderDetailHandler(orderDetailService)
 
+	//purchase_order
+	purchaseOrderRepo := mysql.NewPurchaseOrderMYSQLRepository(db)
+	purchaseOrderService := services.NewPurchaseOrderService(purchaseOrderRepo)
+	purchaseOrderHandler := rest.NewPurchaseOrderHandler(purchaseOrderService)
+
+	//purchase-order-detail
+	purchaseOrderDetailRepo := mysql.NewPurchaseOrderDetailMYSQLRepository(db)
+	purchaseOrderDetailService := services.NewPurchaseOrderDetailService(purchaseOrderDetailRepo)
+	purchaseOrderDetailHandler := rest.NewPurchaseOrderDetailHandler(purchaseOrderDetailService)
+
+
 	app.Post("/register", staffHandler.Register) //correct
 	app.Post("/login", staffHandler.Login) //correct
 
@@ -69,6 +80,12 @@ func main() {
 	app.Get("/order", orderHandler.GetAll) //correct
 
 	app.Get("/order-detail", orderDetailHandler.GetAll) //correct
+
+	app.Post("/purchase-order", purchaseOrderHandler.Create) //correct
+	app.Post("/purchase-order/:PurchaseOrderID", purchaseOrderHandler.UpdateStatusOrder) //correct
+	app.Get("/purchase-order", purchaseOrderHandler.GetAll) //correct
+
+	app.Get("/purchase-order-detail", purchaseOrderDetailHandler.GetAll)//correct
 
 
 	//ทำงานก่อน return 

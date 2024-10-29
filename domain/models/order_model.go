@@ -1,10 +1,11 @@
 package models
 
 const (
-	OrderStatusTranferring   = "Tranferring"
+	OrderStatusTranferring   = "Transferring"
 	OrderStatusPack			 = "Pack"
 	OrderStatusDeliver 		 = "Delivery"
 	OrderStatusCompleted 	 = "Completed"
+	OrderStatusCanceled 	 = "Canceled"
 )
 
 type Order struct {
