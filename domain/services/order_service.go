@@ -7,6 +7,7 @@ import (
 	"github.com/FLUKKIES/marketplace-backend/domain/models"
 	"github.com/FLUKKIES/marketplace-backend/domain/repositories"
 	"github.com/FLUKKIES/marketplace-backend/domain/requests"
+	"github.com/FLUKKIES/marketplace-backend/domain/responses"
 	"github.com/FLUKKIES/marketplace-backend/domain/usecases"
 )
 
@@ -33,7 +34,7 @@ func (o *orderService) Create(ctx context.Context, req *requests.OrderCreateRequ
 	return o.orderRepo.Create(ctx, req)
 }
 
-func (o *orderService) GetAll(ctx context.Context) ([]models.Order, error) {
+func (o *orderService) GetAll(ctx context.Context) ([]responses.Order, error) {
 	return o.orderRepo.GetAll(ctx)
 }
 

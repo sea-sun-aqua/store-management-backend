@@ -6,6 +6,7 @@ const (
 	OrderStatusDeliver 		 = "Delivery"
 	OrderStatusCompleted 	 = "Completed"
 	OrderStatusCanceled 	 = "Canceled"
+	OrderStatusPending	 	 = "Pending"
 )
 
 type Order struct {
@@ -19,3 +20,4 @@ type Order struct {
 	CreatedAt 			string `json:"order_created_date" db:"order_created_date"`
 	StaffID 			string `json:"staff_id" db:"staff_id"`
 }
+

@@ -3,7 +3,7 @@ package requests
 
 type OrderProductRequest struct {
 	ProductID 	string `json:"product_id"`
-	Amount 		int64  `json:"product_amount"`
+	Amount 		int64  `json:"order_amount"`
 }
 
 type OrderCreateRequest struct {
@@ -21,6 +21,7 @@ type OrderCreateRequest struct {
 
 type OrderUpdateStatusRequest struct {
 	Status 		string `json:"order_status"`
+	Products 	[]OrderProductRequest `'json:"products"`
 }
 
 
