@@ -25,11 +25,12 @@ func NewStaffHandler(service usecases.StaffUseCase) StaffHandler {
 
 func (s *staffHandler) Login(c *fiber.Ctx) error {
 	var req *requests.StaffLoginRequest
-	if err := c.BodyParser(&req); err != nil {
-		c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
-	}
+		if err := c.BodyParser(&req); err != nil {
+			c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": err.Error(),
+			})
+		}
+	
 
 	// Login staff
 	staff, err := s.service.Login(c.Context(), req)
